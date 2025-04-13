@@ -2,7 +2,7 @@
   "name": "neura-api",
   "version": "1.0.0",
   "description": "Backend for ai chat application(NeuraTalk).",
-  "type":"module",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "dev": "tsc --noEmit && tsx --watch src/server.ts",
@@ -12,6 +12,8 @@
   "author": "Yasser Fathallah",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^2.2.0",
+    "cohere-ai": "^7.16.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
