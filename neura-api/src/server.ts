@@ -130,7 +130,7 @@ app.post("/chat",
 });
 
 /* ========= Get chat history ========= */
-app.get("/chat/:userId",
+app.post("/chat/:userId",
     async (req: Request, res: Response): Promise<any> =>{
         
         // get user id from request
