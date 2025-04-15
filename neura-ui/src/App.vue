@@ -4,7 +4,7 @@
 
 <template>
   <div>
-   <h1>My APP</h1>
+   <RouterView />
   </div>
 </template>
 
