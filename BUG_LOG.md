@@ -1,0 +1,10 @@
+# 🐞 NeuraTalk Bug Log
+
+A table to track bugs encountered during development.
+
+| Date       | Error / Message                                                                                       | Location       | Cause                                                                                 | Fix                                                                                                                                                   |
+|------------|--------------------------------------------------------------------------------------------------------|----------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2025-04-14 | `TypeError: Cannot destructure property 'name' of 'req.body' as it is undefined`                     |  `neura-api/src/server.ts`     | if both `name` and `email` were not sent in request's body `req.body` returns `undifined                                                | Changed `const { name, email } = req.body` to `const { name, email } = req.body \|\| {}` in line:33                                                                                                       |
+| 2025-04-14 | `npx drizzle-kit generate` → `unknown command 'generate'`                                             | drizzle CLI    | Old drizzle-kit version                                                              | Updated `drizzle-kit` to latest version                                                                                                               |
+| 2025-04-15 | `Can't fetch chat if 'email' and 'name' match a record in system`                    | `neura-ui`      | registerUser was designed to return an message if user is registered already while front end expects to recieve an object contains `userId`, `name`,and `email`                         |  Commented the validation in `neura-api/src/server.ts line:46`
+---
