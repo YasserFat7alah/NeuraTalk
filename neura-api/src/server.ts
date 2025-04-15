@@ -43,9 +43,9 @@ app.post( "/register-user",
       const userInStream = (await chatClient.queryUsers({ id: { $eq: userId } })).users.length; // Search for user in stream chat
 
       //Check if user exits in both steam and database
-      if (userInDB && userInStream)
+      /* if (userInDB && userInStream)
                  return res.status(500).json({ message: "user already exists in both stream and database" });
-
+ */
       // check if user is not recorded in stream chat
       if (!userInStream) {
           // add new user to the stream
