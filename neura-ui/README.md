@@ -1,7 +1,7 @@
 
 # NeuraTalk UI
 
-This is the front end for NeuraTAlk application. It is a **Vue.js 3** application that uses a custom API to interact with [Stream Chat](https://getstream.io), your own [Neon](https://neon.tech) PostgreSQL database, and [Open AI](https://platform.openai.com/).
+This is the front end for NeuraTAlk application. It is a **Vue.js 3** application that uses a custom API to interact with [Stream Chat](https://getstream.io), your own [Neon](https://neon.tech) PostgreSQL database, and [Cohere AI](https://cohere.com/).
 
 <img src="./src/assets/screen-ui.jpg" />
 
