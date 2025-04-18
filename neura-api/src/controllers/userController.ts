@@ -5,6 +5,7 @@ import { users } from "../models/schema.js"; // import user schema
 import { eq } from "drizzle-orm"; // import drizzle orm query builder
 
 
+/* ========= Register user ========= */
 export const registerUser = async (req: Request, res: Response): Promise<any> => {
     // Recieve name and email from request
     const { name, email } = req.body || {};
@@ -21,7 +22,7 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 
       //Check if user exits in both steam and database
       /* if (userInDB && userInStream)
-                 return res.status(500).json({ message: "user already exists in both stream and database" });
+                  return res.status(500).json({ message: "user already exists in both stream and database" });
  */
       // check if user is not recorded in stream chat
       if (!userInStream) {

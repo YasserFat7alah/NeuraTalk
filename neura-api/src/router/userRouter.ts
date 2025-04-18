@@ -6,8 +6,9 @@ import {
 
 const router = express.Router();
 
-/* --- --- --- Initialize Routes --- --- --- */
-router.post("/register-user", registerUser);
+/* --- --- --- INITIALIZE ROUTERS --- --- --- */
+    // REGISTER USER ROUTER
+    router.post("/register-user", registerUser);
 /* --- --- --- --- ---- ---- --- --- --- --- */
 
 
