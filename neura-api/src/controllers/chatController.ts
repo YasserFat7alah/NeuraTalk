@@ -60,3 +60,32 @@ export const chatWithAI = async (req: Request, res: Response): Promise<any> => {
        return res.status(500).json({ error: "Cohere request failed" });
      }
    };
+
+/* ========= Get chat history ========= */
+export const getChatHistory = async (req: Request, res: Response): Promise<any> =>{
+        
+    // get user id from request
+    const userId = req.params.userId;
+
+    //check if id is missing 
+    if(!userId) {
+        console.error("user id is missing!");
+        console.log("========================");
+        return res.status(400).json({error: "user id is missing!"});
+    }
+
+    try {
+        const chatHistory = await db.select().from(chats).where(eq(chats.userId, userId));
+
+        console.log("messages: ", chatHistory);
+        console.log("==========================================");
+        return res.status(200).json({messages: chatHistory});
+        
+    } catch (err) {
+        console.log("==========================================");
+        console.error("Error fetching chat history", err);
+        console.log("==========================================");
+
+return res.status(500).json({ error: "failed to fetch chat history" });
+    }
+};

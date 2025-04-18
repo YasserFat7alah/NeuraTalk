@@ -9,6 +9,8 @@ const router = express.Router();
 /* --- --- --- INITIALIZE ROUTERS --- --- --- */
     // REGISTER USER ROUTER
     router.post("/register-user", registerUser);
+
+    // 
 /* --- --- --- --- ---- ---- --- --- --- --- */
 
 
