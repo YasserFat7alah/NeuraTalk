@@ -24,7 +24,7 @@ const status = ref ('');
 const loading = ref(false);
 const error = ref("");
 
-const validateEmail = async () => {
+const validateEmail = async () :Promise<string> => {
     const validEmail =email.value.toLowerCase().match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
@@ -37,6 +37,9 @@ const createStatus = async () => {
         error.value = 'email is required';
         return;
     }
+
+    if(error.value) return;
+
 
     loading.value = true;
     error.value = '';
@@ -58,7 +61,7 @@ const createStatus = async () => {
             router.push('/create-user');
         } else if (userStatus.status == '1' ) {
             console.log(status.value);
-            router.push('/update-user');
+            router.push('/update-password');
         } else if (userStatus.status == '2' ) {
             console.log(status.value);
             router.push('/log-in');

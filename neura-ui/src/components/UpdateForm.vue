@@ -1,30 +1,33 @@
 <script setup lang="ts">
 import logo from "../assets/logo.png";
+
+
 import {ref, onBeforeMount} from 'vue';
 import axios from 'axios';
-import { useUserStore } from '../stores/user';
+import { useUserStore} from '../stores/user';
+import { useStatus } from '../stores/status';
 import { useRouter } from 'vue-router';
-import { useStatus } from "../stores/status";
 
 import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
 import Button from "./Forms/Button.vue";
 import Error from "./Forms/Error.vue";
-
-
     
+    
+
 const userStore = useUserStore();
 const userStatus = useStatus();
 const router = useRouter();
 
-const name = ref('');
 const email = ref(userStatus.email || '');
+const name = ref('');
 const password = ref('');
-const repeatPassword = ref('');
+const repeatedPassword = ref('');
+
 const loading = ref(false);
 const error = ref("");
 
-const validateEmail = async () :Promise<string> => {
+const validateEmail = async () => {
     const validEmail =email.value.toLowerCase().match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
@@ -32,20 +35,19 @@ const validateEmail = async () :Promise<string> => {
     return error.value = '';
 }
 
-const createUser = async () => {
-    if(!name.value || !email.value || !password.value || !repeatPassword.value) {
-            error.value = 'There are missing data';
-            return;
-    }
-    if(error.value) return;
+const updateUser = async () :Promise<any> => {
+    if(!email || !name ) {
+        return error.value = "name and email are required to prove its your account"
+    };
 
+    if(error.value) return;
 
     loading.value = true;
     error.value = '';
 
     try {  
         const { data } = await axios.post(
-            `${import.meta.env.VITE_API_URL}/user/register`,
+            `${import.meta.env.VITE_API_URL}/user/update`,
             {
                 name: name.value, 
                 email: email.value,
@@ -67,12 +69,13 @@ const createUser = async () => {
         loading.value = false;
 
     }
-}
 
+}
 onBeforeMount(() => { 
     if(userStore.userId) { router.push('/chat'); }  
 });
 </script>
+
 
 <template>
     <FormWrapper>
@@ -104,14 +107,14 @@ onBeforeMount(() => {
             <!-- REPEAT PASSWORD -->
             <InputField type="password"
              placeholder="Type your password again"
-             v-model="repeatPassword" 
+             v-model="repeatedPassword" 
             @blur=""/>
 
             <!-- REGISTER USER -->
             <Button :disabled="loading"
-             onLoading='Creating your account...'
-             onActive='Create Account'
-            @click="createUser" />
+             onLoading='Updating you account...'
+             onActive='Continue Chatting'
+            @click="updateUser" />
 
             <!-- SHOW ERROR -IF FOUND -->
             <Error :error="error" />

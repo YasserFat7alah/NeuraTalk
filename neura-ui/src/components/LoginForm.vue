@@ -24,12 +24,22 @@ const password = ref('');
 const loading = ref(false);
 const error = ref("");
 
+const validateEmail = async () :Promise<string> => {
+    const validEmail =email.value.toLowerCase().match(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+    if(!validEmail) return error.value = "This is not a valid email";
+    return error.value = '';
+}
 
     const loginUser = async () => {
         if(!password.value || !email.value) {
             error.value = 'Missing data!';
             return;
         }
+
+        if(error.value) return;
+
 
         loading.value = true;
         error.value = '';
@@ -74,7 +84,8 @@ onBeforeMount(() => {
 
         <InputField type="text" 
         placeholder="Enter your email"
-        v-model="email"/>
+        v-model="email"
+        @blur="validateEmail"/>
         <InputField type="password" 
         placeholder="Enter your password"
         v-model="password" />
