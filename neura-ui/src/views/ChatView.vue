@@ -48,7 +48,7 @@ const formatMessage = (text: string) => {
     <div class="flex flex-col h-screen bg-gray-900 text-white">
 
         <!-- NavBar -->
-        <Header></Header>
+        <Header />
 
         <!-- Chat Messages -->
         <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4">
