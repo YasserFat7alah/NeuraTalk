@@ -2,6 +2,7 @@ import express from "express";
 import { 
     loginUser,
     registerUser,
+    updateUser,
     checkUser,
 } from "../controllers/userController.js";
 
@@ -19,7 +20,7 @@ const router = express.Router();
     router.post("/user/login",loginUser);
 
     // UPDATE USER ROUTER
-    /* router.post("/user/update",); */
+    router.post("/user/update",updateUser); 
 /* --- --- --- --- ---- ---- --- --- --- --- */
 
 

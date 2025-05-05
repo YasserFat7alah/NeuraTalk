@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { chatClient } from "../utility/chatClient.js"; // import stream chat client
 import { db } from "../config/database.js"; // import database connection
 import { users } from "../models/schema.js"; // import user schema
-import { eq } from "drizzle-orm"; // import drizzle orm query builder
+import { and, eq } from "drizzle-orm"; // import drizzle orm query builder
 import { validateEmail } from '../utility/emailUtil.js';
 import { validatePW, encryptPW, comparePW } from '../utility/pwUtil.js';
 
@@ -187,5 +187,82 @@ export const loginUser = async (req :Request, res :Response) :Promise<any> => {
         ---- ---- ---- ---- ----
       `);
       return res.status(500).send({error: err}); 
+  }
+};
+
+/* ========= UPDATE USER DATA ========= */
+export const updateUser = async (req :Request, res :Response) :Promise<any> => {
+  try {
+    const {
+      name, // REQUIRED
+      email, // REQUIRED
+      password
+    } = req.body || {};
+
+    // CHECK IF EMAIL IS MISSING
+    if(!email || !name) {
+      console.log(`
+        ---- ---- ---- ---- ----
+        -Email and name are required! : ${email} , ${name}
+        ---- ---- ---- ---- ----
+      `);
+      return res.status(400).send({error: 'email and name are required to update data!'}); 
+    };
+
+    // VALIDATE PASSWORD
+    if(!validatePW(password)){
+      console.log(`password must have:
+          - atleast 8 characters
+          - atleast one special character  @ $ ! % * ? & 
+          - atleast one lower-case letter
+          - atleast one upper-case letter`);
+          
+      return res.status(400).send({error: "Invalid password -follow password instructions"});
+    }
+
+    // FIND USER IN DATABASE
+    const userMatches = await db.select().from(users).where(and( eq(users.email, email), eq(users.name, name) ) );
+
+    if(!userMatches.length){
+      console.log(`
+        ---- ---- ---- ---- ----
+        -This Email is not registed in database!
+        ---- ---- ---- ---- ----
+        `);
+        return res.status(400).send({error: "Couldn't find user to update. Please register!"});
+    }
+    
+    // COLLECT USER'S DATA
+    const existingUser = userMatches[0];
+
+    // UPDATE PASSWORD
+    if(password) {
+      if(!(await comparePW(password, existingUser.password))) {
+        console.log(`
+          ---- ---- ---- ---- ----
+          -Updated Password
+          ---- ---- ---- ---- ----
+          `);
+        await db.update(users).set({password: (await encryptPW(password))}).where(eq(users.email, email));
+        return res.status(200).send({email, userId: existingUser.userId, name: existingUser.name});
+      }
+    
+    console.log(`
+      ---- ---- ---- ---- ----
+      -Can't use a password you used before
+      ---- ---- ---- ---- ----
+      `);
+    return res.status(400).send({error: "Can't use a password you used before!"});
+    }
+  
+  return res.status(400).send({error: "You Haven't updated any data"});
+    
+  } catch (err) {
+    console.log(`
+      ---- ---- ---- ---- ----
+      -ERROR! : ${err}
+      ---- ---- ---- ---- ----
+    `);
+    return res.status(500).send({error: err}); 
   }
 }
