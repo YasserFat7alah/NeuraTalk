@@ -11,7 +11,8 @@ export const encryptPW = async ( password: string ): Promise<string> =>{
     return hashedPW;
 }
 
-export const comparePW = async ( password: string , ePW: string ): Promise<boolean> =>{
+export const comparePW = async ( password: string , ePW: string | null ): Promise<boolean> =>{
+    if(!ePW) { ePW = '' };
     const status = await bcrypt.compare(password, ePW);
     return status;
 }

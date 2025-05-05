@@ -106,7 +106,7 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
                 email: ${email}
                 name: ${name}
                 user id: ${userId}`);
-    return res.status(200).json({ name , email, password, userId});
+    return res.status(200).json({ name, email, userId});
 
   } catch (err) {
     //error handler
@@ -118,3 +118,74 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 };
 
 /* ========= LOGIN USER ========= */
+export const loginUser = async (req :Request, res :Response) :Promise<any> => {
+  try {
+        
+    const{
+        email,
+        password
+    } = req.body || {};
+
+    console.log(`
+    ---- ---- ---- ---- ----
+    -Email: ${email}
+    -Password: ${password}
+    ---- ---- ---- ---- ----
+    `);
+
+    // CHECK FOR MISSING DATA INPUTS
+    if(!email || !password) {
+        console.log(`
+        ---- ---- ---- ---- ----
+        - Missing Data Input 
+        ---- ---- ---- ---- ----
+        `);
+        return res.status(400).send({error: "couldn't login Missing data!"});
+
+    }
+
+    // CHECK FOR EMAIL IN DATABASE
+    const userMatch = await db.select().from(users).where(eq(users.email, email));
+
+    if(!userMatch.length){
+        console.log(`
+        ---- ---- ---- ---- ----
+        -This Email is not registed in database!
+        ---- ---- ---- ---- ----
+        `);
+        return res.status(400).send({error: "Couldn't login!"});
+    }
+
+    // COMPARE PASSWORD
+    const user = userMatch[0];
+
+    const loggedIn =  await comparePW(password, user.password);
+
+    if(!loggedIn){
+        console.log(`
+        ---- ---- ---- ---- ----
+        -Wrong password!
+        ---- ---- ---- ---- ----
+        `);
+
+        return res.status(400).send({error: "Couldn't login!"});
+    }
+
+    // LOGIN SUCCESS
+        console.error(`
+        ---- ---- ---- ---- ----
+        -Logged in successfully! Welcome, ${user.name}
+        ---- ---- ---- ---- ----
+        `);
+    return res.status(200).json({ name: user.name , email: user.email, userId: user.userId});
+    
+
+  } catch (err) {
+      console.log(`
+        ---- ---- ---- ---- ----
+        -ERROR! : ${err}
+        ---- ---- ---- ---- ----
+      `);
+      return res.status(500).send({error: err}); 
+  }
+}
