@@ -4,18 +4,21 @@ import {ref} from 'vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
+import { useStatus } from "../stores/status";
 
 import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
 import Button from "./Forms/Button.vue";
 import Error from "./Forms/Error.vue";
 
+
     
 const userStore = useUserStore();
+const userStatus = useStatus();
 const router = useRouter();
 
 const name = ref('');
-const email = ref('');
+const email = ref(userStatus.email || '');
 const password = ref('');
 const repeatPassword = ref('');
 const loading = ref(false);
@@ -66,18 +69,19 @@ const createUser = async () => {
             <h1 class="text-2xl font-semibold mb-4 text-center">
                 Welcome to NeuraTalk
             </h1>
-
-            <!-- ENTER NAME -->
-            <InputField type="text"
-             placeholder="Enter your Name"
-             v-model="name" 
-            @blur=""/>
+            <h3>Register Form</h3>
 
             <!-- ENTER EMAIL -->
             <InputField type="text"
              placeholder="Enter your Email"
              v-model="email" 
             @blur=""/>    
+
+            <!-- ENTER NAME -->
+            <InputField type="text"
+             placeholder="Enter your Name"
+             v-model="name" 
+            @blur=""/>
 
             <!-- ENTER PASSOWRD -->
             <InputField type="password"

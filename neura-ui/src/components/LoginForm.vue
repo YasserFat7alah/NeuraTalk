@@ -2,28 +2,32 @@
 import logo from "../assets/logo.png";
 import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
+import Button from "./Forms/Button.vue";
+import Error from "./Forms/Error.vue";
 
 
-import {ref} from 'vue';
-    import axios from 'axios';
-    import { useUserStore } from '../stores/user';
-    import { useRouter } from 'vue-router';
+import {ref, onBeforeMount} from 'vue';
+import axios from 'axios';
+import { useUserStore } from '../stores/user';
+import { useRouter } from 'vue-router';
+import { useStatus } from "../stores/status";
     
     
 
     
-    const userStore = useUserStore();
-    const router = useRouter();
+const userStore = useUserStore();
+const userstatus = useStatus();
+const router = useRouter();
 
-    const name = ref('');
-    const email = ref('');
-    const loading = ref(false);
-    const error = ref("");
+const email = ref(userstatus.email || '');
+const password = ref('');
+const loading = ref(false);
+const error = ref("");
 
 
-    const createUser = async () => {
-        if(!name.value || !email.value) {
-            error.value = 'name and email are required';
+    const loginUser = async () => {
+        if(!password.value || !email.value) {
+            error.value = 'Missing data!';
             return;
         }
 
@@ -32,9 +36,9 @@ import {ref} from 'vue';
 
         try {  
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}/register-user`,
+                `${import.meta.env.VITE_API_URL}/user/login`,
                 {
-                    name: name.value, 
+                    password: password.value, 
                     email: email.value
                 });
             
@@ -53,8 +57,11 @@ import {ref} from 'vue';
             loading.value = false;
 
         }
-
     }
+
+onBeforeMount(() => { 
+    if(userStore.userId) { router.push('/chat'); }  
+});
 </script>
 
 <template>
@@ -63,15 +70,22 @@ import {ref} from 'vue';
         <h1 class="text-2xl font-semibold mb-4 text-center">
             Welcome to NeuraTalk
         </h1>
+        <h3>Login Form</h3>
 
-        <input type="text" class="w-full p-2 mb-2 bg-gray-700 text-white rounded-lg focus:outline-none"
-            placeholder="Name" v-model="name"/>
-        <input type="text" class="w-full p-2 mb-2 bg-gray-700 text-white rounded-lg focus:outline-none"
-            placeholder="Email" v-model="email"/>
-        <button class="w-full p-2 mb-2 bg-blue-500 rounded-lg" :disabled="loading" @click="createUser">
-            {{ loading ? 'logging in...' : 'Start Chatting'}}
-        </button>
-        <p v-if="error" class="text-red-400 text-center mt-2">{{ error }}</p>
+        <InputField type="text" 
+        placeholder="Enter your email"
+        v-model="email"/>
+        <InputField type="password" 
+        placeholder="Enter your password"
+        v-model="password" />
+
+        <Button :disabled="loading"
+        onLoading='logging you in...'
+        onActive='Start Chatting'
+        @click="loginUser" />
+
+        
+        <Error :error="error" />
     </FormWrapper>
 </template>
 

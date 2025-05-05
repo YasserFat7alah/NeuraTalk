@@ -6,8 +6,8 @@ import RegisterView from "../views/RegisterView.vue";
 
 const routes =[
     {path: '/', component: HomeView},
-    {path: '/login', component: LoginView},
-    {path: '/register-user', component: RegisterView},
+    {path: '/log-in', component: LoginView},
+    {path: '/create-user', component: RegisterView},
     {path:'/chat', component: ChatView}
 ];
 
