@@ -15,10 +15,10 @@ const router = express.Router();
     router.post("/user/register", registerUser);
 
     // LOGIN USER ROUTER
-    router.post("/user/login",);
+    /* router.post("/user/login",); */
 
     // UPDATE USER ROUTER
-    router.post("/user/update",);
+    /* router.post("/user/update",); */
 /* --- --- --- --- ---- ---- --- --- --- --- */
 
 

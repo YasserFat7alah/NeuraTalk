@@ -19,17 +19,17 @@ export const checkUser = async (req: Request, res: Response): Promise<any> => {
     const userInDB = await db.select().from(users).where(eq(users.email, email)); 
     
     if(!userInDB.length) {
-      const status = 0;
+      const status = "0";
       console.log ("user is not defined register");
       return res.status(200).json({status});
     }
 
     if(!userInDB[0].password) {
-      const status = 1;
+      const status = "1";
       console.log ("user needs to update password");
       return res.status(200).json({status});;
     } else {
-      const status = 2;
+      const status = "2";
       console.log ("enter password to login ...");
       return res.status(200).json({status});;
     }
@@ -104,9 +104,9 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
     // SERVER RESPONSE
     console.log(`
                 email: ${email}
-                password: ${password}
-                name: ${name}`);
-    return res.status(200).json({user: { name , email, password}});
+                name: ${name}
+                user id: ${userId}`);
+    return res.status(200).json({ name , email, password, userId});
 
   } catch (err) {
     //error handler
