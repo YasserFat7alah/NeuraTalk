@@ -11,15 +11,21 @@ defineProps({
 </script>
 
 <template>
-    <button class="w-full h-12 bg-primary border-0 outline-0 rounded-md 
-            text-neutral-200 text-base font-semibold cursor-pointer hover:bg-primary/80
-            focus:bg-primary/80 active:bg-primary/80 transition-all duration-200"
-     :type='type' :disabled="disabled">
-        {{ disabled ? `${onLoading}` : `${onActive}` }}
-    </button>
+    <div class="comment text-neutral-300">
+        <p>
+        <slot />
+        </p>
+    </div>
 </template>
 
 
 <style scoped>
+.comment {
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
 
 </style>

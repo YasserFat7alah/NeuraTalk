@@ -1,1 +1,37 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@theme {
+    /* primary colors */
+    --color-primary: #3882FE ;
+    --color-primary-light: #5A97FE;
+    --color-primary-dark: #2C6ACC;
+    /* secondary colors */
+    --color-secondary: #655BFE;
+    --color-secondary-light: #7C6FFE;
+    --color-secondary-dark: #4B45D0;
+    /* neutrals  */
+    --color-neutral-100: #F9FAFB;
+    --color-neutral-200: #E5E7EB;
+    --color-neutral-300: #D1D5DB;
+    --color-neutral-700: #374151;
+    --color-neutral-900: #111827;
+    /* error */
+    --color-error: #EF4444;
+}
+
+*{
+
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+a, abbr, b, strong, router-link {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+a:hover, abbr:hover, b:hover, strong:hover, router-link:hover {
+    color: var(--color-primary-light);
+    text-decoration: underline;
+}

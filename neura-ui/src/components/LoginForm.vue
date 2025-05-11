@@ -4,6 +4,7 @@ import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
 import Button from "./Forms/Button.vue";
 import Error from "./Forms/Error.vue";
+import Paragraph from "./Forms/Paragraph.vue";
 
 
 import {ref, onBeforeMount} from 'vue';
@@ -11,7 +12,7 @@ import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
 import { useStatus } from "../stores/status";
-    
+import { capitalize } from 'vue';
     
 
     
@@ -25,6 +26,9 @@ const loading = ref(false);
 const error = ref("");
 
 const validateEmail = async () :Promise<string> => {
+    if(!email.value) return error.value = "Email is required";
+    if(email.value.length < 5) return error.value = "Email is too short";
+
     const validEmail =email.value.toLowerCase().match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
@@ -49,13 +53,13 @@ const validateEmail = async () :Promise<string> => {
                 `${import.meta.env.VITE_API_URL}/user/login`,
                 {
                     password: password.value, 
-                    email: email.value
+                    email: email.value.toLowerCase(), 
                 });
             
             userStore.setUser({
                 userId: data.userId,
-                name: data.name,
-                email: data.email
+                name: capitalize(data.name),
+                email: data.email.toLowerCase(),
             });
 
             router.push('/chat');
@@ -78,25 +82,39 @@ onBeforeMount(() => {
     <FormWrapper>
          <img :src="logo" alt="NeuraTalk logo" class="mx-auto w-24 h-24 mb-4">
         <h1 class="text-2xl font-semibold mb-4 text-center">
-            Welcome to NeuraTalk
+            Enter your password
         </h1>
-        <h3>Login Form</h3>
+        
 
-        <InputField type="text" 
-        placeholder="Enter your email"
-        v-model="email"
-        @blur="validateEmail"/>
-        <InputField type="password" 
-        placeholder="Enter your password"
-        v-model="password" />
+        <!-- EMAIL -->
+        <InputField type="email"
+                label ="Email"
+             v-model="email" 
+            @handleError="validateEmail">
+            <ion-icon name="mail"></ion-icon>
+            </InputField>
 
+        <!-- PASSWORD -->
+        <InputField type="password"
+               label ="password"
+           v-model="password" 
+        @handleError="validateEmail">
+        <ion-icon name="lock-closed"></ion-icon>
+        </InputField>
+
+        <!-- SUBMIT -->
         <Button :disabled="loading"
         onLoading='logging you in...'
         onActive='Start Chatting'
         @click="loginUser" />
 
-        
+        <!-- ERROR -->
         <Error :error="error" />
+
+        <!-- SIGN UP -->
+         <Paragraph> 
+            <p>Don't have an account? <router-link to="/create-user">Sign Up</router-link></p>
+        </Paragraph>
     </FormWrapper>
 </template>
 

@@ -5,11 +5,13 @@ import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
 import { useStatus } from "../stores/status";
+import { capitalize } from 'vue';
 
 import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
 import Button from "./Forms/Button.vue";
 import Error from "./Forms/Error.vue";
+import Paragraph from "./Forms/Paragraph.vue";
 
 
     
@@ -47,15 +49,15 @@ const createUser = async () => {
         const { data } = await axios.post(
             `${import.meta.env.VITE_API_URL}/user/register`,
             {
-                name: name.value, 
-                email: email.value,
+                name: capitalize(name.value), 
+                email: email.value.toLowerCase(),
                 password: password.value,
             });
             
         userStore.setUser({
             userId: data.userId,
-            name: data.name,
-            email: data.email
+            name: capitalize(data.name),
+            email: data.email.toLowerCase(),
         });
 
         router.push('/chat');
@@ -75,48 +77,58 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <FormWrapper>
-
-            <img :src="logo" alt="NeuraTalk logo" class="mx-auto w-24 h-24 mb-4">
-            <h1 class="text-2xl font-semibold mb-4 text-center">
-                Welcome to NeuraTalk
-            </h1>
-            <h3>Register Form</h3>
-
-            <!-- ENTER EMAIL -->
-            <InputField type="text"
-             placeholder="Enter your Email"
-             v-model="email" 
-            @blur="validateEmail"/>    
-
-            <!-- ENTER NAME -->
-            <InputField type="text"
-             placeholder="Enter your Name"
-             v-model="name" 
-            @blur=""/>
-
-            <!-- ENTER PASSOWRD -->
-            <InputField type="password"
-             placeholder="Create a strong password"
-             v-model="password"
-            @blur=""/>        
-
-            <!-- REPEAT PASSWORD -->
-            <InputField type="password"
-             placeholder="Type your password again"
-             v-model="repeatPassword" 
-            @blur=""/>
-
-            <!-- REGISTER USER -->
-            <Button :disabled="loading"
-             onLoading='Creating your account...'
-             onActive='Create Account'
-            @click="createUser" />
-
-            <!-- SHOW ERROR -IF FOUND -->
-            <Error :error="error" />
+        <FormWrapper>
+         <img :src="logo" alt="NeuraTalk logo" class="mx-auto w-24 h-24 mb-4">
+        <h1 class="text-2xl font-semibold mb-4 text-center">
+            Create Account
+        </h1>
+        
+        
+        <!-- EMAIL -->
+        <InputField type="email"
+        label ="Email"
+        v-model="email" 
+        @handleError="validateEmail">
+        <ion-icon name="mail"></ion-icon>
+        </InputField>
     
-        </FormWrapper>
+        <!-- Name -->
+        <InputField type="text"
+            label ="Name"
+         v-model="name" >
+        <ion-icon name="person"></ion-icon>
+        </InputField>
+
+        <!-- PASSWORD -->
+        <InputField type="password"
+               label ="password"
+           v-model="password" 
+        >
+        <ion-icon name="lock-closed"></ion-icon>
+        </InputField>
+
+        <!-- REPEAT PASSWORD -->
+        <InputField type="password"
+               label ="repeat password"
+           v-model="repeatPassword" 
+        >
+        <ion-icon name="repeat"></ion-icon>
+        </InputField>
+
+        <!-- SUBMIT -->
+        <Button :disabled="loading"
+        onLoading='logging you in...'
+        onActive='Create Account'
+        @click="createUser" />
+
+        <!-- ERROR -->
+        <Error :error="error" />
+
+        <!-- SIGN UP -->
+         <Paragraph> 
+            <p>Already have an account? <router-link to="/log-in">Log In</router-link></p>
+        </Paragraph>
+    </FormWrapper>
 </template>
 
 <style scoped>

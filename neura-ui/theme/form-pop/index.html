@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA_Compatible" content="IE=edge">
+    
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h2 class="logo">YAS</h2>
+            <nav class="navigation">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Service</a>
+                <a href="#">Contact</a>
+
+                <button class="btnLogin-popup">Login</button>
+            </nav>
+    </header>
+    <!-- POP UP -->
+<div class="black">
+    <div class="wrapper">
+        <!-- CLOSE ICON -->
+         <span class="icon-close">
+            <ion-icon name="close"></ion-icon>
+         </span>
+        <!-- FORM -->
+         <!-- LOGIN -->
+        <div class="form-box login">
+            <!-- LABEL -->
+            <h2>Login</h2>
+            <!-- EMAIL -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                <input type="email" required>
+                <label for="">Email</label>
+            </div>
+            <!-- PASSWORD -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" required>
+                <label for="">Password</label>
+            </div>
+            <!-- REMEMBER ME || FORGOT PASSWORD -->
+             <div class="remember-forgot">
+                <label>
+                    <input type="checkbox">
+                    Remember me
+                </label>
+                <a href="#">Forgot Password?</a>
+             </div>
+             <!-- SUBMIT BUTTON -->
+              <button type="submit" class="btn">Login</button>
+              <!-- LOGIN => REGISTER -->
+               <div class="login-register">
+                <p>
+                    Don't have account? 
+                    <a href="#" class="register-link">Register Now</a>
+                </p>
+               </div>
+        </div>
+
+         <!-- REGISTER -->
+        <div class="form-box register hide">
+            <!-- LABEL -->
+            <h2>Registration</h2>
+            <!-- NAME -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="person"></ion-icon></ion-icon></span>
+                <input type="text" required>
+                <label for="">Name</label>
+            </div>
+            <!-- EMAIL -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                <input type="email" required>
+                <label for="">Email</label>
+            </div>
+            <!-- PASSWORD -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" required>
+                <label for="">Password</label>
+            </div>
+            <!-- REPEAT PASSWORD -->
+            <div class="input-box">
+                <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                <input type="password" required>
+                <label for="">Repeat Password</label>
+            </div>
+            <!-- TERMS & CONDITIONS || FORGOT PASSWORD -->
+             <div class="remember-forgot">
+                <label>
+                    <input type="checkbox">
+                    I agree to all <a href="#">terms & conditions</a>.
+                </label>
+             </div>
+             <!-- SUBMIT BUTTON -->
+              <button type="submit" class="btn">Create Account</button>
+              <!-- LOGIN => REGISTER -->
+               <div class="login-register">
+                <p>
+                    Already have an account? 
+                    <a href="#" class="login-link">Login Now</a>
+                </p>
+               </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

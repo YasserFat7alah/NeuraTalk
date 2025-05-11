@@ -12,7 +12,7 @@ import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
 import Button from "./Forms/Button.vue";
 import Error from "./Forms/Error.vue";
-    
+import Paragraph from "./Forms/Paragraph.vue";   
     
 
 const userStore = useUserStore();
@@ -25,6 +25,9 @@ const loading = ref(false);
 const error = ref("");
 
 const validateEmail = async () :Promise<string> => {
+    if(!email.value) return error.value = "Email is required";
+    if(email.value.length < 5) return error.value = "Email is too short";
+
     const validEmail =email.value.toLowerCase().match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
@@ -48,12 +51,12 @@ const createStatus = async () => {
         const { data } = await axios.post(
             `${import.meta.env.VITE_API_URL}/user/check`,
             {
-               email: email.value,
+               email: email.value.toLowerCase().trim(),
             });
             
         userStatus.setStatus({
             status: data.status,
-            email: email.value
+            email: email.value.toLowerCase().trim(),
         });
 
         if (userStatus.status == '0' ) {
@@ -90,10 +93,12 @@ onBeforeMount(() => {
             </h1>
 
 
-            <InputField type="text"
-             placeholder="Enter your Email"
+            <InputField type="email"
+                placeholder ="Email"
              v-model="email" 
-            @blur="validateEmail"/>
+            @handleError="validateEmail">
+            <ion-icon name="mail"></ion-icon>
+            </InputField>
 
             <Button :disabled="loading"
              onLoading="Please wait ..."
@@ -102,6 +107,10 @@ onBeforeMount(() => {
 
 
             <Error :error="error" />
+
+            <Paragraph >
+                More about <a href="">Us</a>.
+            </Paragraph>
     </FormWrapper>
 </template>
 

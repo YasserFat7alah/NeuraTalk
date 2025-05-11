@@ -2,11 +2,12 @@
 import logo from "../assets/logo.png";
 
 
-import {ref, onBeforeMount} from 'vue';
+import {ref, onBeforeMount, capitalize} from 'vue';
 import axios from 'axios';
 import { useUserStore} from '../stores/user';
 import { useStatus } from '../stores/status';
 import { useRouter } from 'vue-router';
+
 
 import FormWrapper from "./Forms/FormWrapper.vue";
 import InputField from "./Forms/InputField.vue";
@@ -49,15 +50,15 @@ const updateUser = async () :Promise<any> => {
         const { data } = await axios.post(
             `${import.meta.env.VITE_API_URL}/user/update`,
             {
-                name: name.value, 
-                email: email.value,
+                name: capitalize(name.value), 
+                email: email.value.toLowerCase(),
                 password: password.value,
             });
             
         userStore.setUser({
             userId: data.userId,
-            name: data.name,
-            email: data.email
+            name: capitalize(data.name),
+            email: data.email.toLowerCase(),
         });
 
         router.push('/chat');
@@ -82,9 +83,10 @@ onBeforeMount(() => {
 
             <img :src="logo" alt="NeuraTalk logo" class="mx-auto w-24 h-24 mb-4">
             <h1 class="text-2xl font-semibold mb-4 text-center">
-                Welcome to NeuraTalk
+                Welcome Back!
             </h1>
-            <h3>Register Form</h3>
+            <p> Due to some changes we need you to create a strong password</p>
+
 
             <!-- ENTER EMAIL -->
             <InputField type="text"
@@ -100,7 +102,6 @@ onBeforeMount(() => {
 
             <!-- ENTER PASSOWRD -->
             <InputField type="password"
-             placeholder="Create a strong password"
              v-model="password"
             @blur=""/>        
 
