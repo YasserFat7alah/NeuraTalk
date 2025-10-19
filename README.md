@@ -37,8 +37,8 @@
 
 ## ⚙️ Project Setup
 <ul>
-  <li><a href="./neura-ui">Frontend (neura-ui)</a> - Vue 3 app (more deatails at <a href="./neura-api/README.md">api-docs</a>)</li>
-  <li><a href="./neura-api">Backend (neura-api)</a> - Node.js API (more deatails at <a href="./neura-ui/README.md">ui-docs</a>)</li>
+  <li><a href="./neura-ui">Frontend (neura-ui)</a> - Vue 3 app (more details at <a href="./neura-api/README.md">api-docs</a>)</li>
+  <li><a href="./neura-api">Backend (neura-api)</a> - Node.js API (more details at <a href="./neura-ui/README.md">ui-docs</a>)</li>
   <li><a href="./README.md">README</a> - Contains project details</li>
 </ul>
 
