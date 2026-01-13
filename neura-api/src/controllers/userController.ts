@@ -5,14 +5,39 @@ import { users } from "../models/schema.js"; // import user schema
 import { eq } from "drizzle-orm"; // import drizzle orm query builder
 
 
+// Email validation helper
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 /* ========= Register user ========= */
-export const registerUser = async (req: Request, res: Response): Promise<any> => {
+export const registerUser = async (req: Request, res: Response): Promise<void> => {
     // Recieve name and email from request
     const { name, email } = req.body || {};
 
     //check if any information is missing
-    if (!name || !email)
-      return res.status(400).json({ error: "Name and Email are required!" });
+    if (!name || !email) {
+      res.status(400).json({ error: "Name and Email are required!" });
+      return;
+    }
+
+    // Validate email format
+    if (typeof email !== 'string' || !isValidEmail(email)) {
+      res.status(400).json({ error: "Please provide a valid email address!" });
+      return;
+    }
+
+    // Validate name
+    if (typeof name !== 'string' || name.trim().length === 0) {
+      res.status(400).json({ error: "Name must be a non-empty string!" });
+      return;
+    }
+
+    if (name.length > 100) {
+      res.status(400).json({ error: "Name is too long! Maximum length is 100 characters." });
+      return;
+    }
 
     try {
       const userId = email.replace(/[^a-zA-Z0-9_-]/g, "_"); // Initialize userId
@@ -42,12 +67,12 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
             console.log("==========================================");
         }
 
-        return res.status(200).json({ userId, name, email });
+        res.status(200).json({ userId, name: name.trim(), email: email.trim().toLowerCase() });
     } catch (err) {
       //error handler
       console.log("==========================================");
-      console.error("Error regestring user", err);
+      console.error("Error registering user", err);
       console.log("==========================================");
-      return res.status(500).json({ error: "adding user request failed" });
+      res.status(500).json({ error: "Failed to register user. Please try again later." });
     }
   };

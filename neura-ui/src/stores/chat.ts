@@ -1,72 +1,80 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { create } from 'zustand';
 import axios from 'axios';
 import { useUserStore } from './user';
 
 interface ChatMessage {
-    message: string, 
-    reply: string,
+    message: string;
+    reply: string;
 }
 
 interface FormattedMessage {
-    role: 'user' | 'ai',
-    content: string
+    role: 'user' | 'ai';
+    content: string;
 }
 
-export const useChatStore = defineStore('chat',
-    ()=>{
-        const messages = ref<{role: string; content: string}[]>([]);
-        const isLoading = ref(false);
+interface ChatState {
+    messages: FormattedMessage[];
+    isLoading: boolean;
+    loadChatHistory: () => Promise<void>;
+    sendMessage: (message: string) => Promise<void>;
+}
 
-        const userStore = useUserStore();
+export const useChatStore = create<ChatState>((set, get) => ({
+    messages: [],
+    isLoading: false,
 
-        // Load Chat history
-        const loadChatHistory = async () => {
-            if(!userStore.userId) return;
+    loadChatHistory: async () => {
+        const userId = useUserStore.getState().userId;
+        if (!userId) return;
 
-            try {
-                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/chat/${userStore.userId}`,
-                {   userId: userStore.userId});
+        try {
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_API_URL}/chat/${userId}`,
+                { userId }
+            );
 
-                messages.value = data.messages
+            const formattedMessages = data.messages
                 .flatMap((msg: ChatMessage): FormattedMessage[] => [
-                    {role: 'user', content: msg.message},
-                    {role:'ai', content: msg.reply}
+                    { role: 'user', content: msg.message },
+                    { role: 'ai', content: msg.reply },
                 ])
                 .filter((msg: FormattedMessage) => msg.content);
 
-
-            } catch (err) {
-                console.error('Error loading chat history', err);
-                
-            }
+            set({ messages: formattedMessages });
+        } catch (err) {
+            console.error('Error loading chat history', err);
         }
+    },
 
-        // Send new message to AI
-        const sendMessage = async (message: string ) => {
-            if(!message.trim() || !userStore.userId) return; 
+    sendMessage: async (message: string) => {
+        const trimmedMessage = message.trim();
+        const userId = useUserStore.getState().userId;
 
-            messages.value.push ({ role: 'user', content: message});
-            
-            isLoading.value =true;
+        if (!trimmedMessage || !userId) return;
 
-            try {
-                const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/chat`,
-                     {message, userId: userStore.userId});
+        // Add user message immediately
+        set((state) => ({
+            messages: [...state.messages, { role: 'user', content: trimmedMessage }],
+        }));
 
+        set({ isLoading: true });
 
-                messages.value.push({role: 'ai', content: data.reply});
+        try {
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_API_URL}/chat`,
+                { message: trimmedMessage, userId }
+            );
 
-            } catch (err) {
-                console.error('Error Sending message', err);
-
-                messages.value.push({role:'ai', content:'Error Sending message!!'});
-                
-            }finally {
-                isLoading.value = false;
-            }
+            set((state) => ({
+                messages: [...state.messages, { role: 'ai', content: data.reply }],
+            }));
+        } catch (err) {
+            console.error('Error sending message', err);
+            set((state) => ({
+                messages: [...state.messages, { role: 'ai', content: 'Error sending message!!' }],
+            }));
+        } finally {
+            set({ isLoading: false });
         }
-
-        return { messages, isLoading, loadChatHistory, sendMessage};
-    }
-);
+    },
+}));

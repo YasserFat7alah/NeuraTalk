@@ -1,22 +1,33 @@
-import { defineStore } from 'pinia';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export const useUserStore = defineStore('user', {
-    state:() => ({
-        userId: null as string | null,
-        name: null as string | null, 
-        email: null as string | null
-    }),
-    actions: {
-        setUser(data: {userId: string; name: string; email: string}){
-            this.userId = data.userId;
-            this.name = data.name;
-            this.email = data.email;
-        }, 
-        logout() {
-            this.userId = null; 
-            this.name = null;
-            this.email = null;
+interface UserState {
+    userId: string | null;
+    name: string | null;
+    email: string | null;
+    setUser: (data: { userId: string; name: string; email: string }) => void;
+    logout: () => void;
+}
+
+export const useUserStore = create<UserState>()(
+    persist(
+        (set) => ({
+            userId: null,
+            name: null,
+            email: null,
+            setUser: (data) => set({
+                userId: data.userId,
+                name: data.name,
+                email: data.email,
+            }),
+            logout: () => set({
+                userId: null,
+                name: null,
+                email: null,
+            }),
+        }),
+        {
+            name: 'user-storage', // unique name for localStorage key
         }
-    },
-    persist: true // keeps user loggedin across page reloads
-})
+    )
+);

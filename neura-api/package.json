@@ -12,7 +12,7 @@
   "author": "Yasser Fathallah",
   "license": "MIT",
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.0",
+    "@neondatabase/serverless": "^1.0.2",
     "body-parser": "^2.2.0",
     "cohere-ai": "^7.16.0",
     "cors": "^2.8.5",
@@ -20,13 +20,15 @@
     "drizzle-orm": "^0.41.0",
     "express": "^5.1.0",
     "openai": "^4.93.0",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.7",
     "stream-chat": "^8.59.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.1",
-    "drizzle-kit": "^0.30.6",
+    "drizzle-kit": "^0.31.7",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   }

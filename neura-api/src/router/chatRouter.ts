@@ -12,8 +12,8 @@ const router = express.Router();
     // CHAT WITH AI ROUTER
     router.post('/chat', chatWithAI);
 
-    // GET CHAT HISTORT ROUTER
-    router.post('/chat/:userId', getChatHistory);
+    // GET CHAT HISTORY ROUTER (should be GET, not POST)
+    router.get('/chat/:userId', getChatHistory);
 /* --- --- --- --- ---- ---- --- --- --- --- */
 
 export {router as chatRouter};

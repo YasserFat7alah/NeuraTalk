@@ -14,11 +14,15 @@ The Vue.js frontend for this application can be found [here](https://github.com/
 
 ```
 PORT=8000
+NODE_ENV=development
 STREAM_API_KEY=""
 STREAM_API_SECRET=""
 COHERE_API_KEY=""
 DATABASE_URL="postgresql://username:password@localhost:5432/dbname"
+ALLOWED_ORIGINS=*
 ```
+
+**Note:** For production, set `NODE_ENV=production` and specify your frontend URL(s) in `ALLOWED_ORIGINS` (comma-separated, e.g., `https://yourdomain.com,https://www.yourdomain.com`).
 
 You can get these keys by signing up for Stream, cohereAI, and Neon.
 
@@ -38,9 +42,12 @@ This will create the necessary tables in your database.
 
 ## Endpoints
 
-- POST `/register-user` - Create a user in Stream chat and in our own database.
-- POST `/chat` - Creates a new Stream chat channel, sends a request to Open AI to generate a response, and saves the chat history in our database.
-- POST `/chat/:userId` - Gets the chat history for a specific user.
+- **GET** `/health` - Health check endpoint. Returns server status and uptime.
+- **POST** `/register-user` - Create a user in Stream chat and in our own database.
+  - Body: `{ "name": "string", "email": "string" }`
+- **POST** `/chat` - Creates a new Stream chat channel, sends a request to Cohere AI to generate a response, and saves the chat history in our database.
+  - Body: `{ "message": "string", "userId": "string" }`
+- **GET** `/chat/:userId` - Gets the chat history for a specific user.
   
 <br/><br/>
 
